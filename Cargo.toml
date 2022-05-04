@@ -1,0 +1,47 @@
+[package]
+name = "esp32-rust-build-environment"
+version = "0.0.1"
+authors = ["Brendan Horan"]
+edition = "2021"
+categories = ["embedded", "hardware-support"]
+keywords = ["embedded", "svc", "idf", "esp-idf", "esp32"]
+description = "Bare minium earthly build enviroment and example hello world program for the ESP32"
+license = "BSD 3-Clause License"
+readme = "README.md"
+
+
+[profile.release]
+# https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html
+opt-level = "s"
+
+[profile.dev]
+# https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html
+debug = true # Symbols are nice and they don't increase the size on Flash
+opt-level = "z"
+
+
+[features]
+# https://doc.rust-lang.org/cargo/reference/features-examples.html
+# https://github.com/esp-rs/embedded-svc
+#https://lib.rs/crates/esp-idf-hal
+
+default = ["experimental"]
+
+# Enable this feature for the build to use the PlatformIO tooling instead of the native ESP-IDF tooling under the hood
+# https://crates.io/crates/esp-idf-sys
+# https://platformio.org
+pio = ["esp-idf-sys/pio"]
+
+experimental = ["esp-idf-svc/experimental", "esp-idf-hal/experimental", "embedded-svc/experimental"]
+
+
+[dependencies]
+esp-idf-sys = { version = "0.31", features = ["binstart"] }
+esp-idf-svc = "0.41"
+esp-idf-hal = "0.37"
+embedded-svc = "0.21"
+embedded-hal = "0.2"
+
+[build-dependencies]
+embuild = "0.29"
+anyhow = "1"
