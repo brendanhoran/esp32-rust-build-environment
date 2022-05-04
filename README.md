@@ -26,9 +26,9 @@ Release build:
 earthly --build-arg BUILD_TYPE=release  +firmware
 ```
 
-5. Flash the firmware
-Where: `/dev/ttyUSB0` is the serial device of your ESP32.   
-Where: `esp32-rust-build-environment` is the project name from your `Cargo.toml` file.
+5. Flash the firmware    
+Where: `/dev/ttyUSB0` is the serial device of your ESP32.    
+Where: `esp32-rust-build-environment` is the project name from your `Cargo.toml` file.   
 
 ```
 earthly --build-arg SERIAL_PORT=/dev/ttyUSB0 --build-arg BUILD_BINARY=artifacts/debug/esp32-rust-build-environment +flash
