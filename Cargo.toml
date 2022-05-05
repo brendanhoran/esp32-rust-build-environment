@@ -2,7 +2,7 @@
 name = "esp32-rust-build-environment"
 version = "0.0.1"
 authors = ["Brendan Horan"]
-edition = "2021"
+edition = "2018"
 categories = ["embedded", "hardware-support"]
 keywords = ["embedded", "svc", "idf", "esp-idf", "esp32"]
 description = "Bare minium earthly build enviroment and example hello world program for the ESP32"
@@ -23,25 +23,32 @@ opt-level = "z"
 [features]
 # https://doc.rust-lang.org/cargo/reference/features-examples.html
 # https://github.com/esp-rs/embedded-svc
-#https://lib.rs/crates/esp-idf-hal
+# https://lib.rs/crates/esp-idf-hal
 
-default = ["experimental"]
+default = ["std", "alloc", "esp-idf-sys", "embedded-svc"]
+std = ["alloc", "esp-idf-sys/std"]
+alloc = []
+
 
 # Enable this feature for the build to use the PlatformIO tooling instead of the native ESP-IDF tooling under the hood
 # https://crates.io/crates/esp-idf-sys
 # https://platformio.org
 pio = ["esp-idf-sys/pio"]
 
-experimental = ["esp-idf-svc/experimental", "esp-idf-hal/experimental", "embedded-svc/experimental"]
-
 
 [dependencies]
-esp-idf-sys = { version = "0.31", features = ["binstart"] }
+embedded-hal = "=1.0.0-alpha.8"
+embedded-hal-0-2 = { package = "embedded-hal", version = "0.2.7", features = ["unproven"] }
+embedded-svc = { version = "0.21", optional = true, default-features = false }
+esp-idf-sys = { version = "0.31.4", optional = true, default-features = false, features = ["native"] }
 esp-idf-svc = "0.41"
 esp-idf-hal = "0.37"
-embedded-svc = "0.21"
-embedded-hal = "0.2"
+anyhow = "1"
 
 [build-dependencies]
 embuild = "0.29"
 anyhow = "1"
+
+[dev-dependencies]
+anyhow = "1"
+esp-idf-sys = { version = "0.31.4", features = ["native", "binstart"] }
