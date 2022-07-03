@@ -8,7 +8,7 @@ linux-setup:
   RUN apt update && \
       DEBIAN_FRONTEND=noninteractive apt install -y \
       git curl gcc ninja-build cmake libudev-dev \
-      python3 python3-pip libusb-1.0-0 libssl-dev pkg-config libtinfo5
+      python3 python3-pip libusb-1.0-0 libssl-dev pkg-config libtinfo5 unzip
 
 esp-rust-setup:
   FROM +linux-setup
@@ -17,7 +17,7 @@ esp-rust-setup:
 
 firmware:
   FROM +esp-rust-setup
-   WORKDIR build
+  WORKDIR build
   
   # Build type, default is debug. 
   # can be overridden on the command line via "--build-arg BUILD_TYPE=release" to get a release build.
@@ -38,7 +38,7 @@ firmware:
     RUN cargo +esp build --target xtensa-esp32-espidf --release
   ELSE
     RUN echo "[INFO] Building a debug binary"
-    RUN cargo +esp build --target xtensa-esp32-espidf
+    RUN cargo +esp build --target xtensa-esp32-espidf -v
   END
 
   SAVE ARTIFACT target/xtensa-esp32-espidf/* AS LOCAL artifacts/
@@ -60,3 +60,4 @@ flash:
   
   # Flash the firmware
   RUN espflash $SERIAL_PORT $BUILD_BINARY
+
